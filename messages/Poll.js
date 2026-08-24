@@ -55,6 +55,11 @@ function handlePollMessage(sock, msg) {
         opt => Buffer.compare(getOptionHash(opt.optionName), selected) === 0
       );
 
+      if (!option) {
+        // Stale/unknown option hash — ignore rather than crash the handler.
+        return true;
+      }
+
       poll.onVote?.(option.optionName, msg);
     }
     else {
